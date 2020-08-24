@@ -31,4 +31,7 @@ public class Light extends AbstractActor {
         else setAnimation(lightOffAnimation);
     }
 
+    public boolean isPowered() {
+        return isPowered;
+    }
 }

@@ -1,7 +1,10 @@
 package sk.tuke.kpi.oop.game;
 
+import org.jetbrains.annotations.NotNull;
+import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
+import sk.tuke.kpi.oop.game.actions.PerpetualReactorHeating;
 import sk.tuke.kpi.oop.game.tools.FireExtinguisher;
 import sk.tuke.kpi.oop.game.tools.Hammer;
 
@@ -56,7 +59,7 @@ public class Reactor extends AbstractActor {
     }
 
     public void decreaseTemperature(int decrement) {
-        if(decrement < 0 || !isRunning) return;
+        if(decrement < 0 || !isRunning || (temperature - decrement < -1)) return;
         if(damage >= 50 && damage < 100) {
             temperature -= decrement / 2;
         } else if(damage >= 100) {
@@ -76,6 +79,12 @@ public class Reactor extends AbstractActor {
         else if(temperature < 6000) setAnimation(hotAnimation);
         if(!isRunning && light != null) removeLight(light);
         if(isRunning && light != null) addLight(light);
+    }
+
+    @Override
+    public void addedToScene(@NotNull Scene scene) {
+        super.addedToScene(scene);
+        new PerpetualReactorHeating(1).scheduleFor(this);
     }
 
     public void repairWith(Hammer hammer) {
@@ -102,7 +111,8 @@ public class Reactor extends AbstractActor {
 
     public void addLight(Light light) {
         this.light = light;
-        light.setElectricityFlow(true);
+        if(isRunning)
+            light.setElectricityFlow(true);
     }
 
     public void removeLight(Light light) {
@@ -111,13 +121,15 @@ public class Reactor extends AbstractActor {
 
     public void turnOn() {
         if(!isRunning) isRunning = true;
-        light.setElectricityFlow(true);
+        if(light != null)
+            light.setElectricityFlow(true);
         updateAnimation();
     }
 
     public void turnOff() {
         if(isRunning) isRunning = false;
-        light.setElectricityFlow(false);
+        if(light != null)
+            light.setElectricityFlow(false);
         updateAnimation();
     }
 
