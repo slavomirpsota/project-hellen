@@ -2,23 +2,36 @@ package sk.tuke.kpi.oop.game;
 
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
+import sk.tuke.kpi.gamelib.graphics.Color;
 
-public class ControlSwitch extends AbstractActor {
-    private Reactor reactor;
-    private final Animation controllerAnimation;
+public class PowerSwitch extends AbstractActor implements Switchable{
+    private Switchable device;
+    private final Animation powerSwitchAnimation;
 
-    public ControlSwitch(Reactor reactor) {
-        controllerAnimation = new Animation("sprites/switch.png");
-        setAnimation(controllerAnimation);
-        this.reactor = reactor;
+    public PowerSwitch(Switchable device) {
+        powerSwitchAnimation = new Animation("sprites/switch.png");
+        setAnimation(powerSwitchAnimation);
+        this.device = device;
     }
 
-    public void toggle() {
-        if(reactor.getDidBreak()) {
-            reactor.turnOff();
-            return;
-        }
-        if(reactor.isRunning()) reactor.turnOff();
-        else reactor.turnOn();
+    public Switchable getDevice() {
+        return device;
+    }
+
+    @Override
+    public void turnOn() {
+        device.turnOn();
+        getAnimation().setTint(Color.WHITE);
+    }
+
+    @Override
+    public void turnOff() {
+        device.turnOff();
+        getAnimation().setTint(Color.GRAY);
+    }
+
+    @Override
+    public boolean isOn() {
+        return device.isOn();
     }
 }

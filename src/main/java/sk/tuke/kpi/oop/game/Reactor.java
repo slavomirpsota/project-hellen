@@ -8,25 +8,32 @@ import sk.tuke.kpi.oop.game.actions.PerpetualReactorHeating;
 import sk.tuke.kpi.oop.game.tools.FireExtinguisher;
 import sk.tuke.kpi.oop.game.tools.Hammer;
 
-public class Reactor extends AbstractActor {
+import java.util.HashSet;
+import java.util.Set;
+
+public class Reactor extends AbstractActor implements Switchable, EnergyConsumer{
     private int temperature;
     private int damage;
-    private boolean isRunning;
+    private boolean isOn;
+    private boolean isPowered;
     private boolean didBreak;
     private boolean wasExtinguished;
-    private Light light;
+    private EnergyConsumer device;
+    private Set<EnergyConsumer> devices;
     private final Animation offAnimation;
     private final Animation normalAnimation;
     private final Animation hotAnimation;
     private final Animation brokenAnimation;
     private final Animation extinguishedAnimation;
 
-    public Reactor(Light light) {
+    public Reactor(EnergyConsumer device) {
         temperature = 0;
         damage = 0;
-        isRunning = false;
+        isOn = false;
         didBreak = false;
-        this.light = light;
+        devices = new HashSet<>();
+        devices.add(device);
+        isPowered = true;
         offAnimation = new Animation("sprites/reactor.png");
         normalAnimation = new Animation("sprites/reactor_on.png", 80, 80, 0.1f, Animation.PlayMode.LOOP_PINGPONG);
         hotAnimation = new Animation("sprites/reactor_hot.png", 80, 80, 0.05f, Animation.PlayMode.LOOP_PINGPONG);
@@ -36,7 +43,7 @@ public class Reactor extends AbstractActor {
     }
 
     public void increaseTemperature(int increment) {
-        if(increment < 0 || !isRunning) return;
+        if(increment < 0 || !isOn) return;
         if(temperature >= 2000 && damage < 33) {
             temperature += increment;
             damage = ((temperature - 2000) / 40);
@@ -48,7 +55,7 @@ public class Reactor extends AbstractActor {
             temperature += (int) Math.ceil(increment * 2);
             damage = ((temperature - 2000) / 40);
             if(damage > 100) {
-                isRunning = false;
+                isOn = false;
                 didBreak = true;
                 damage = 100;
             }
@@ -59,7 +66,7 @@ public class Reactor extends AbstractActor {
     }
 
     public void decreaseTemperature(int decrement) {
-        if(decrement < 0 || !isRunning || (temperature - decrement < -1)) return;
+        if(decrement < 0 || !isOn || (temperature - decrement < -1)) return;
         if(damage >= 50 && damage < 100) {
             temperature -= decrement / 2;
         } else if(damage >= 100) {
@@ -74,11 +81,11 @@ public class Reactor extends AbstractActor {
     private void updateAnimation() {
         if(didBreak) setAnimation(brokenAnimation);
         else if(wasExtinguished) setAnimation(extinguishedAnimation);
-        else if(!isRunning && damage < 100) setAnimation(offAnimation);
+        else if(!isOn && damage < 100) setAnimation(offAnimation);
         else if(temperature <= 4000) setAnimation(normalAnimation);
         else if(temperature < 6000) setAnimation(hotAnimation);
-        if(!isRunning && light != null) removeLight(light);
-        if(isRunning && light != null) addLight(light);
+        if(!isOn && devices != null) removeDevice(device);
+        if(isOn && devices != null) addDevice(device);
     }
 
     @Override
@@ -109,32 +116,37 @@ public class Reactor extends AbstractActor {
         }
     }
 
-    public void addLight(Light light) {
-        this.light = light;
-        if(isRunning)
-            light.setElectricityFlow(true);
+    public void addDevice(EnergyConsumer device) {
+        if (device != null) {
+            if (isOn) device.setPowered(true);
+            devices.add(device);
+        }
     }
 
-    public void removeLight(Light light) {
-        light.setElectricityFlow(false);
+    public void removeDevice(EnergyConsumer device){
+        if (device != null && devices.contains(device)) {
+                device.setPowered(false);
+                devices.remove(device);
+        }
     }
 
     public void turnOn() {
-        if(!isRunning) isRunning = true;
-        if(light != null)
-            light.setElectricityFlow(true);
+        if(!isOn) isOn = true;
+        if(device != null)
+            device.setPowered(true);
         updateAnimation();
     }
 
     public void turnOff() {
-        if(isRunning) isRunning = false;
-        if(light != null)
-            light.setElectricityFlow(false);
+        if(isOn) isOn = false;
+        if(device != null)
+            device.setPowered(false);
         updateAnimation();
     }
 
-    public boolean isRunning() {
-        return isRunning;
+    @Override
+    public boolean isOn() {
+        return isOn;
     }
 
     public boolean getDidBreak() {
@@ -147,5 +159,10 @@ public class Reactor extends AbstractActor {
 
     public int getDamage() {
         return damage;
+    }
+
+    @Override
+    public void setPowered(boolean isPowered) {
+        this.isPowered = isPowered;
     }
 }

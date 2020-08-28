@@ -8,7 +8,7 @@ import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.framework.actions.Loop;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 
-public class Cooler extends AbstractActor {
+public class Cooler extends AbstractActor implements Switchable{
     private boolean isOn;
     private Animation coolerOnAnimation;
     private Animation coolerOffAnimation;
@@ -27,6 +27,10 @@ public class Cooler extends AbstractActor {
             reactor.decreaseTemperature(1);
     }
 
+    /**
+     * This method is scheduling actions when Actor is added to scene and repeating it every frame
+     * @param scene
+     */
     @Override
     public void addedToScene(@NotNull Scene scene) {
         super.addedToScene(scene);
@@ -49,6 +53,10 @@ public class Cooler extends AbstractActor {
 
     public boolean isOn() {
         return isOn;
+    }
+
+    public Reactor getReactor() {
+        return reactor;
     }
 
 }
