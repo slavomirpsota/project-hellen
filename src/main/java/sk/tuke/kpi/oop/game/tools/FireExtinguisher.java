@@ -2,7 +2,7 @@ package sk.tuke.kpi.oop.game.tools;
 
 import sk.tuke.kpi.gamelib.graphics.Animation;
 
-public class FireExtinguisher extends BreakableTool {
+public class FireExtinguisher extends AbstractBreakableTool {
     private final Animation extinguisherAnimation;
 
     public FireExtinguisher() {

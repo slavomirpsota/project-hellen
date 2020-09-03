@@ -3,7 +3,7 @@ package sk.tuke.kpi.oop.game;
 import sk.tuke.kpi.gamelib.framework.AbstractActor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 
-public class Light extends AbstractActor implements Switchable, EnergyConsumer{
+public class Light extends AbstractActor implements ISwitchable, IEnergyConsumer {
     private boolean isOn;
     private boolean isPowered;
     private final Animation lightOnAnimation;

@@ -11,22 +11,22 @@ import sk.tuke.kpi.oop.game.tools.Hammer;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Reactor extends AbstractActor implements Switchable, EnergyConsumer{
+public class Reactor extends AbstractActor implements ISwitchable, IEnergyConsumer {
     private int temperature;
     private int damage;
     private boolean isOn;
     private boolean isPowered;
     private boolean didBreak;
     private boolean wasExtinguished;
-    private EnergyConsumer device;
-    private Set<EnergyConsumer> devices;
+    private IEnergyConsumer device;
+    private Set<IEnergyConsumer> devices;
     private final Animation offAnimation;
     private final Animation normalAnimation;
     private final Animation hotAnimation;
     private final Animation brokenAnimation;
     private final Animation extinguishedAnimation;
 
-    public Reactor(EnergyConsumer device) {
+    public Reactor(IEnergyConsumer device) {
         temperature = 0;
         damage = 0;
         isOn = false;
@@ -116,14 +116,14 @@ public class Reactor extends AbstractActor implements Switchable, EnergyConsumer
         }
     }
 
-    public void addDevice(EnergyConsumer device) {
+    public void addDevice(IEnergyConsumer device) {
         if (device != null) {
             if (isOn) device.setPowered(true);
             devices.add(device);
         }
     }
 
-    public void removeDevice(EnergyConsumer device){
+    public void removeDevice(IEnergyConsumer device){
         if (device != null && devices.contains(device)) {
                 device.setPowered(false);
                 devices.remove(device);

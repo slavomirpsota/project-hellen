@@ -1,6 +1,6 @@
 package sk.tuke.kpi.oop.game;
 
-public interface Switchable {
+public interface ISwitchable {
 
     void turnOn();
     void turnOff();
