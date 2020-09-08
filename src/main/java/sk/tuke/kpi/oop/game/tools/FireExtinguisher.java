@@ -15,6 +15,7 @@ public class FireExtinguisher<A extends Reactor> extends AbstractBreakableTool<A
 
     @Override
     public void useWith(A actor) {
+        super.useWith(actor);
         actor.extinguish(this);
     }
 }

@@ -1,5 +1,6 @@
 package sk.tuke.kpi.oop.game.tools;
 
+import sk.tuke.kpi.gamelib.Actor;
 import sk.tuke.kpi.gamelib.graphics.Animation;
 import sk.tuke.kpi.oop.game.Reactor;
 
@@ -14,6 +15,7 @@ public class Hammer<A extends Reactor> extends AbstractBreakableTool<A> {
 
     @Override
     public void useWith(A actor) {
+        super.useWith(actor);
         actor.repair(this);
     }
 }

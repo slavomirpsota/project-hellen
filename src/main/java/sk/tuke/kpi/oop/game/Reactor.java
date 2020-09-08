@@ -113,11 +113,13 @@ public class Reactor extends AbstractActor implements ISwitchable, IEnergyConsum
         return false;
     }
 
-    public <A extends Reactor> void extinguish(FireExtinguisher<A> tool) {
+    public <A extends Reactor> boolean extinguish(FireExtinguisher<A> tool) {
         if(tool != null) {
             temperature = 4000;
             setAnimation(extinguishedAnimation);
+            return true;
         }
+        return false;
     }
 
     public void addDevice(IEnergyConsumer device) {

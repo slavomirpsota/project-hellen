@@ -6,6 +6,8 @@ import sk.tuke.kpi.gamelib.Scene;
 import sk.tuke.kpi.gamelib.actions.Invoke;
 import sk.tuke.kpi.gamelib.framework.actions.Loop;
 import sk.tuke.kpi.gamelib.graphics.Animation;
+import sk.tuke.kpi.oop.game.tools.Hammer;
+import sk.tuke.kpi.oop.game.tools.Wrench;
 
 import java.util.Random;
 
@@ -40,6 +42,6 @@ public class DefectiveLight extends Light implements IRepairable{
 
     @Override
     public boolean repair() {
-        return repair;
+        return false;
     }
 }
