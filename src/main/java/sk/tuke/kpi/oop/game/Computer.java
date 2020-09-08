@@ -21,19 +21,27 @@ public class Computer extends AbstractActor implements IEnergyConsumer {
     }
 
     public int add(int firstNumber, int secondNumber) {
-        return firstNumber + secondNumber;
+        if(isPowered)
+            return firstNumber + secondNumber;
+        else return 0;
     }
 
     public float add(float firstNumber, float secondNumber) {
-        return firstNumber + secondNumber;
+        if(isPowered)
+            return firstNumber + secondNumber;
+        else return 0;
     }
 
     public int sub(int firstNumber, int secondNumber) {
-        return firstNumber + secondNumber;
+        if(isPowered)
+            return firstNumber - secondNumber;
+        else return 0;
     }
 
     public float sub(float firstNumber, float secondNumber) {
-        return firstNumber + secondNumber;
+        if(isPowered)
+            return firstNumber - secondNumber;
+        else return 0;
     }
 
     @Override

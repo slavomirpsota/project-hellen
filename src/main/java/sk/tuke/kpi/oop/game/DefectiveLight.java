@@ -9,12 +9,14 @@ import sk.tuke.kpi.gamelib.graphics.Animation;
 
 import java.util.Random;
 
-public class DefectiveLight extends Light {
+public class DefectiveLight extends Light implements IRepairable{
     private final Animation lightOnAnimation;
     private final Animation lightOffAnimation;
+    private boolean repair;
 
 
     public DefectiveLight() {
+        repair = false;
         lightOnAnimation = new Animation("sprites/light_on.png");
         lightOffAnimation = new Animation("sprites/light_off.png");
     }
@@ -36,4 +38,8 @@ public class DefectiveLight extends Light {
         }
     }
 
+    @Override
+    public boolean repair() {
+        return repair;
+    }
 }

@@ -7,15 +7,17 @@ import sk.tuke.kpi.gamelib.graphics.Animation;
 import sk.tuke.kpi.oop.game.actions.PerpetualReactorHeating;
 import sk.tuke.kpi.oop.game.tools.FireExtinguisher;
 import sk.tuke.kpi.oop.game.tools.Hammer;
+import sk.tuke.kpi.oop.game.tools.IUsable;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class Reactor extends AbstractActor implements ISwitchable, IEnergyConsumer {
+public class Reactor extends AbstractActor implements ISwitchable, IEnergyConsumer, IRepairable {
     private int temperature;
     private int damage;
     private boolean isOn;
     private boolean isPowered;
+    private boolean repair;
     private boolean didBreak;
     private boolean wasExtinguished;
     private IEnergyConsumer device;
@@ -28,6 +30,7 @@ public class Reactor extends AbstractActor implements ISwitchable, IEnergyConsum
 
     public Reactor(IEnergyConsumer device) {
         temperature = 0;
+        repair = false;
         damage = 0;
         isOn = false;
         didBreak = false;
@@ -94,24 +97,25 @@ public class Reactor extends AbstractActor implements ISwitchable, IEnergyConsum
         new PerpetualReactorHeating(1).scheduleFor(this);
     }
 
-    public void repairWith(Hammer hammer) {
-        if(hammer != null) {
+    public <A extends Reactor> boolean repair(Hammer<A> tool) {
+        if(tool != null) {
             if(damage >= 50) {
                 temperature -= 2000;
                 damage -= 50;
+                return true;
             } else {
                 temperature -= damage * 40;
                 damage = 0;
+                return true;
             }
         }
-        hammer.use();
         updateAnimation();
+        return false;
     }
 
-    public void extinguishWith(FireExtinguisher fireExtinguisher) {
-        if(fireExtinguisher != null) {
+    public <A extends Reactor> void extinguish(FireExtinguisher<A> tool) {
+        if(tool != null) {
             temperature = 4000;
-            fireExtinguisher.use();
             setAnimation(extinguishedAnimation);
         }
     }
@@ -164,5 +168,10 @@ public class Reactor extends AbstractActor implements ISwitchable, IEnergyConsum
     @Override
     public void setPowered(boolean isPowered) {
         this.isPowered = isPowered;
+    }
+
+    @Override
+    public boolean repair() {
+        return repair;
     }
 }
