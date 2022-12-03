@@ -1,16 +1,12 @@
-package sk.tuke.kpi.oop.game;
+package sk.tuke.kpi.oop.game.scenarios;
 
 import org.jetbrains.annotations.NotNull;
-import sk.tuke.kpi.gamelib.Actor;
 import sk.tuke.kpi.gamelib.Scene;
-import sk.tuke.kpi.gamelib.actions.ActionSequence;
-import sk.tuke.kpi.gamelib.actions.Invoke;
-import sk.tuke.kpi.gamelib.actions.Wait;
-import sk.tuke.kpi.gamelib.actions.When;
 import sk.tuke.kpi.gamelib.framework.Scenario;
-import sk.tuke.kpi.oop.game.tools.Hammer;
+import sk.tuke.kpi.oop.game.PowerSwitch;
+import sk.tuke.kpi.oop.game.Reactor;
 
-public class Gameplay extends Scenario {
+public class TrainingGameplay extends Scenario {
 
     @Override
     public void setupPlay(@NotNull Scene scene) {
